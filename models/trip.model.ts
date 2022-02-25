@@ -6,7 +6,7 @@ const ReadingSchema = new Schema({
     lat: Number,
     lon: Number,
     address: String,
-});
+}, { _id: false });
 
 ReadingSchema.methods.toJSON = function() {
     const { _id, ...reading } = this.toObject();
@@ -16,7 +16,7 @@ ReadingSchema.methods.toJSON = function() {
 const LocationSchema = new Schema({
     lat: Number,
     lon: Number
-});
+}, { _id: false });
 
 LocationSchema.methods.toJSON = function() {
     const { _id, ...location } = this.toObject();
@@ -39,5 +39,13 @@ const TripSchema = new Schema({
     ]
 
 });
+
+TripSchema.methods.toJSON = function() {
+    const { __v, _id, ...trip } = this.toObject();
+    return {
+        id: _id,
+        ...trip
+    };
+}
 
 export default model<Trip>('Trip', TripSchema);

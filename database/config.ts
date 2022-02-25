@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export const dbConnection = async() => {
 
-    const dbUri: string = process.env.MONGODB_CNN || 'localhost:3306';
+    const dbUri: string = process.env.MONGODB_CNN || 'localhost:3306/jooycarDB';
 
     try {
 

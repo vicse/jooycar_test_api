@@ -2,16 +2,27 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import axios, { AxiosResponse } from 'axios';
 
-import { Trip, Location, Reading } from '../interfaces/trip.interface';
 import TripModel from '../models/trip.model';
-import { MapBoxApiResponse } from '../interfaces/mapbox.interface';
-import { ReadingRequest } from '../interfaces/readingRequest.interface';
+import { Trip, Location, Reading, 
+        MapBoxApiResponse, ReadingRequest } from '../interfaces';
 
-export const getTrips = ( req: Request, res: Response) => {
+export const getTrips = async( req: Request, res: Response) => {
+
+    const { limit = 20, offset = 0 } = req.query;
+    const { start_gte, start_lte, distance_gte = 0.05 } = req.query;
+
+    const trips = await TripModel.find({
+            $or: [
+                { distance : { $gte: distance_gte} },
+                { 'start.time' : { $gte: start_gte, $lte: start_lte } }
+            ]
+        })
+        .skip(Number(offset))
+        .limit(Number(limit));
 
     res.json({
-        msg: 'getTrips'
-    })
+        trips
+    });
 
 }
 
