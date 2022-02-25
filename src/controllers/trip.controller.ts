@@ -83,7 +83,7 @@ const buildTotalTripDistance = ( readings: ReadingRequest[] ): number => {
     return readings.reduce((acc, el) => acc + (getHours(el.time)*(el.speed)), 0)
 }
 
-const buildReading = async( { time, location: { lat, lon } } : ReadingRequest ): Promise<Reading> => {
+export const buildReading = async( { time, location: { lat, lon } } : ReadingRequest ): Promise<Reading> => {
 
     const address = await getAddressByLocation(lat, lon);
     

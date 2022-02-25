@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { getTrips, postTrips } from '../controllers/trip.controller';
 import { ErrorConstant } from '../constants/errors.constants';
+import { getTrips, postTrips } from '../controllers/trip.controller';
 
 const router = Router();
 
