@@ -4,10 +4,8 @@
 
 | Operation | Type | URI |
 | --------- | ---- | --- |
-| Obtiene la lista de viajes.| GET  | 
-http://localhost:3000/api/trips/v1 |
-| Registra un viaje en Mongo ATLAS. | POST  | 
-http://localhost:3000/api/trips/v1 |
+| Obtiene la lista de viajes.| GET  | http://localhost:3000/api/trips/v1 |
+| Registra un viaje en Mongo ATLAS. | POST  | http://localhost:3000/api/trips/v1 |
 
 
 ## Api's Consumidas
