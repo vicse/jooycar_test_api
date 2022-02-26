@@ -22,7 +22,7 @@ npm install
 ### Build Docker Image
  
 ```
-docker build -t api-jooycar
+docker build -t api-jooycar .
 ```
 
 ### Run Docker Container
