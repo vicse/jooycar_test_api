@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 
-export interface Trip extends mongoose.Document {
+export interface Trip extends Document {
     start: Reading,
     end: Reading,
     distance: Number,
@@ -9,14 +9,14 @@ export interface Trip extends mongoose.Document {
     boundingBox: Location[]
 }
 
-export interface Reading extends Document {
+export interface Reading {
     time: number,
     lat: number,
     lon: number,
     address: string,
 }
 
-export interface Location extends Document {
+export interface Location {
     lat: number;
     lon: number;
 }

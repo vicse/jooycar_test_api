@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import axios, { AxiosResponse } from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import TripModel from '../models/trip.model';
 import { Trip, Location, Reading, 
@@ -39,8 +41,8 @@ export const postTrips = async( req: Request, res: Response) => {
     const { readings } = req.body;
 
     const trip = {
-        start: await buildStartReading( readings ),
-        end: await buildEndReading( readings ),
+        start: await buildReading( buildStartReading( readings) ),
+        end: await buildReading( buildEndReading( readings ) ),
         distance: buildTotalTripDistance( readings ),
         duration: buildTotalTripDurationMinutes( readings ),
         overspeedsCount : buidOverSpeedsCount( readings ),
@@ -83,14 +85,14 @@ const buildTotalTripDistance = ( readings: ReadingRequest[] ): number => {
     return readings.reduce((acc, el) => acc + (getHours(el.time)*(el.speed)), 0)
 }
 
-export const buildReading = async( { time, location: { lat, lon } } : ReadingRequest ): Promise<Reading> => {
+const buildReading = async( { time, location: { lat, lon } } : ReadingRequest ): Promise<Reading> => {
 
     const address = await getAddressByLocation(lat, lon);
     
     return { time, lat, lon, address } as Reading;
 }
 
-const buildStartReading = async( readings: ReadingRequest[] ): Promise<Reading> => {
+export const buildStartReading = ( readings: ReadingRequest[] ): ReadingRequest => {
 
     const startReadingRequest: ReadingRequest = readings
         .reduce(
@@ -98,10 +100,10 @@ const buildStartReading = async( readings: ReadingRequest[] ): Promise<Reading> 
             acc.time < el.time ? acc : el
         );
 
-    return buildReading(startReadingRequest);
+    return startReadingRequest;
 }
 
-const buildEndReading = async( readings: ReadingRequest[] ): Promise<Reading> => {
+export const buildEndReading = ( readings: ReadingRequest[] ): ReadingRequest => {
 
     const endReadingRequest: ReadingRequest = readings
         .reduce(
@@ -109,17 +111,17 @@ const buildEndReading = async( readings: ReadingRequest[] ): Promise<Reading> =>
             acc.time > el.time ? acc : el
         );
     
-    return buildReading(endReadingRequest);
+    return endReadingRequest;
 
 }
 
-const builBoundingBox = ( readings: ReadingRequest[] ): Location[] => {
+export const builBoundingBox = ( readings: ReadingRequest[] ): Location[] => {
 
     return readings.reduce((acc, el) => [ ...acc , el.location ], [] as Location[]);
 
 }
 
-const getAddressByLocation = async(lat: number, lon: number): Promise<string> => {
+export const getAddressByLocation = async(lat: number, lon: number): Promise<string> => {
 
     const mapBoxToken = process.env.MAPBOX_TOKEN;
     const mapBoxUri = process.env.MAPBOX_API_URI;
@@ -140,7 +142,7 @@ const getAddressByLocation = async(lat: number, lon: number): Promise<string> =>
 
 }
 
-const buidOverSpeedsCount = ( readings: ReadingRequest[] ): number => {
+export const buidOverSpeedsCount = ( readings: ReadingRequest[] ): number => {
     const readingsReduce = readings
         .reduce((acc, el) => el.speed > el.speedLimit ? acc.concat(true) : acc.concat(false)
         , [] as boolean[]);

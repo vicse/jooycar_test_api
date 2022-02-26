@@ -3,10 +3,6 @@ import { createServer } from './src/utils/server';
 
 dotenv.config();
 
-// export const server = new Server();
-
-// server.listen();
-
 (async() => {
 
     const port = process.env.PORT || '3000';
